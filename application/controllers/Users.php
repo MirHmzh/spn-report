@@ -7,10 +7,14 @@ class Users extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Users_model');
+		$this->logged_in = $this->session->userdata('logged_in');
 		if ($this->session->userdata('role') == 2) {
 			$this->session->set_flashdata('type', 'warning');
 			$this->session->set_flashdata('msg', 'Anda bukan Admin');
 			redirect('siswa','refresh');
+		}
+		if (empty($this->session->has_userdata('logged_in'))) {
+			redirect('main/login','refresh');
 		}
 		$this->session->set_userdata('menu', 'users');
 	}

@@ -16,6 +16,9 @@ class Siswa extends CI_Controller {
 		$this->create = $this->session->userdata('siswa.create');
 		$this->export = $this->session->userdata('siswa.export');
 		$this->session->set_userdata('menu', 'siswa');
+		if (empty($this->session->has_userdata('logged_in'))) {
+			redirect('main/login','refresh');
+		}
 	}
 
 	public function index()

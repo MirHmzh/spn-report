@@ -26,6 +26,7 @@ class Main extends CI_Controller {
 			$data = $this->Users_model->check_login($this->input->post('username'), $this->input->post('password'));
 			if ($data) {
 				$userdata = array(
+					'logged_in' => true,
 					'name' => $data['name'],
 					'username' => $data['username'],
 					'role' => $data['role']
