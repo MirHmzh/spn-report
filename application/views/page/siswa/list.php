@@ -87,7 +87,7 @@
                       columns : [
                         { data : "foto",
                           render : (data, type, row) => {
-                            let html = `<img style="max-width: 10em" src="http://localhost/spn/assets/uploads/${data}">`;
+                            let html = `<img style="max-width: 100px" src="http://localhost/spn/assets/uploads/${data}">`;
                             return html;
                           }
                         },
