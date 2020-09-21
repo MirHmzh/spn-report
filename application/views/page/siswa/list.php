@@ -85,6 +85,12 @@
                         method : "POST"
                       },
                       columns : [
+                        { data : "foto",
+                          render : (data, type, row) => {
+                            let html = `<img style="max-width: 10em" src="http://localhost/spn/assets/uploads/${data}">`;
+                            return html;
+                          }
+                        },
                         { data : "nik_siswa" ,
                           render : (data, type, row) => {
                             let html = `<a href="http://localhost/spn/index.php/Siswa/save/${row.id_siswa}">${data}</a>`;
@@ -95,12 +101,6 @@
                         { data : "nama_siswa" },
                         { data : "nosis_panjang" },
                         { data : "jalur_seleksi" },
-                        { data : "foto",
-                          render : (data, type, row) => {
-                            let html = `<img style="max-width: 10em" src="http://localhost/spn/assets/uploads/${data}">`;
-                            return html;
-                          }
-                        },
                         { data : "id_siswa",
                           render : (data, type, row) => {
                           console.log(data);
