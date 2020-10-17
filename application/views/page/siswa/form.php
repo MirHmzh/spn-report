@@ -850,15 +850,17 @@
       let load_daerah_p = 1;
       let load_daerah_k = 1;
       let load_daerah_c = 1;
-      let loading_pref = Swal.fire({
-        title: 'Memuat',
-        text : 'Memuat data siswa...',
-        allowOutsideClick : false,
-        timerProgressBar: true,
-        onBeforeOpen: () => {
-          Swal.showLoading()
-        },
-      });
+      <?php if(isset($siswa['id_siswa'])){ ?>
+        let loading_pref = Swal.fire({
+          title: 'Memuat',
+          text : 'Memuat data siswa...',
+          allowOutsideClick : false,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+          },
+        });
+      <?php } ?>
       $("select[name='provinsi_sma']").change((el) => {
         let val = $(el.target).val();
         $.get("<?= base_url('main/get_kabupaten/') ?>"+val, function(data) {
