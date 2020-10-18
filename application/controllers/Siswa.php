@@ -43,6 +43,7 @@ class Siswa extends CI_Controller {
 		$kecamatan = $this->Main_model->select_kecamatan(1101);
 		$kelurahan = $this->Main_model->select_kelurahan(1101010);
 		$polda = $this->Main_model->select_polda();
+		$polres = $this->Main_model->select_polres(11);
 		if ($id == null) {
 			$this->load->view('layout/base', [
 				'content_view' => 'page/siswa/form',
@@ -51,6 +52,7 @@ class Siswa extends CI_Controller {
 				'kecamatan' => $kecamatan,
 				'kelurahan' => $kelurahan,
 				'polda' => $polda,
+				'polres' => $polres
 			]);
 		}else{
 			$siswa = $this->Siswa_model->detail_siswa($id);
@@ -61,6 +63,7 @@ class Siswa extends CI_Controller {
 				'kecamatan' => $kecamatan,
 				'kelurahan' => $kelurahan,
 				'polda' => $polda,
+				'polres' => $polres,
 				'siswa' => $siswa,
 			]);
 		}

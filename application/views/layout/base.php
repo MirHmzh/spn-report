@@ -75,6 +75,9 @@
     .sidebar-footer a:hover{
       background: #172D44 !important;
     }
+    .null-input{
+      border: 1px solid red;
+    }
   </style>
 
   <body class="nav-md">
