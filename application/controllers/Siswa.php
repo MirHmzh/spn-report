@@ -471,6 +471,162 @@ class Siswa extends CI_Controller {
 		$writer->save('php://output');
 	}
 
+	function import()
+	{
+		$config['upload_path'] = './xlsx';
+		$config['allowed_types'] = 'xlsx';
+
+		$this->load->library('upload', $config);
+
+		if ( ! $this->upload->do_upload('file')){
+			$error = array('error' => $this->upload->display_errors());
+			echo json_encode(['msg' => 'Upload xlsx gagal', 'data' => $error]);
+			return false;
+		}
+		else{
+			$data = array('upload_data' => $this->upload->data());
+		}
+
+		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+		$reader->setReadDataOnly(true);
+		$spreadsheet = $reader->load($data['upload_data']['full_path']);
+		$spsdata = $spreadsheet->getActiveSheet()->toArray();
+		foreach ($spsdata as $k => $v) {
+			if($k > 0){
+				$siswa['nik_siswa'] = $v[4];
+				$siswa['nama_siswa'] = $v[5];
+				$siswa['jk_siswa'] = $v[8];
+				$siswa['no_hp_siswa'] = $v[14];
+				$siswa['email_siswa'] = $v[15];
+				$siswa['tinggi_siswa'] = $v[16];
+				$siswa['berat_siswa'] = $v[17];
+				$siswa['agama_siswa'] = $v[18];
+				$siswa['suku_siswa'] = $v[19];
+				$siswa['tempat_lahir'] = $v[20];
+				$siswa['tanggal_lahir'] = $v[21];
+				$siswa['golongan_darah'] = $v[22];
+				$siswa['alamat_rumah'] = $v[23];
+
+				$siswa_provinsi = $this->Main_model->find_prov($v[27]);
+				$siswa_kabupaten_kota = $this->Main_model->find_kabupaten($siswa_provinsi->id, $v[26]);
+				$siswa_kecamatan = $this->Main_model->find_kecamatan($siswa_kabupaten_kota->id, $v[25]);
+				$siswa_kelurahan = $this->Main_model->find_kelurahan($siswa_kecamatan->id, $v[24]);
+
+				$siswa['provinsi'] = $siswa_provinsi->id;
+				$siswa['kabupaten_kota'] = $siswa_kabupaten_kota->id;
+				$siswa['kecamatan'] = $siswa_kecamatan->id;
+				$siswa['kelurahan'] = $siswa_kelurahan->id;
+
+				$siswa['pekerjaan'] = $v[28];
+				$siswa['status_kawin'] = $v[29];
+				$siswa['tgl_ktp'] = $v[30];
+				$siswa['bahasa_asing'] = $v[31];
+				$siswa['bahasa_daerah'] = $v[32];
+				$siswa['prestasi'] = $v[33];
+
+				$siswa_asal_polda = $this->Main_model->find_polda($v[1]);
+				$siswa_asal_polres = $this->Main_model->find_polres($siswa_asal_polda->id_polda, $v[2]);
+
+				$siswa['asal_polda'] = $siswa_asal_polda->id_polda;
+				$siswa['asal_polres'] = $siswa_asal_polres->id_polres;
+
+
+				$pendidikan['ban'] = $v[67];
+				$pendidikan['nim'] = $v[68];
+				$pendidikan['jenjang_pendidikan'] = $v[69];
+				$pendidikan['nama_prodi'] = $v[70];
+				$pendidikan['nama_pt'] = $v[71];
+				$pendidikan['ipk'] = $v[72];
+				$pendidikan['rata_rapor'] = $v[73];
+				$pendidikan['dikum_akhir'] = $v[74];
+				$pendidikan['jurusan'] = $v[75];
+				$pendidikan['rata_un_sma'] = $v[76];
+				$pendidikan['thn_lulus_sma'] = $v[77];
+
+				$pendidikan_provinsi_sma = $this->Main_model->find_prov($v[78]);
+				$pendidikan['provinsi_sma'] = $pendidikan_provinsi_sma->id;
+				$pendidikan_kab_kota_sma = $this->Main_model->find_kabupaten($pendidikan['provinsi_sma'], $v[79]);
+				$pendidikan['kab_kota_sma'] = $pendidikan_kab_kota_sma->id;
+
+				$pendidikan['nama_sma'] = $v[80];
+				$pendidikan['rata_un_smp'] = $v[81];
+				$pendidikan['thn_lulus_smp'] = $v[82];
+
+				$pendidikan_provinsi_smp = $this->Main_model->find_prov($v[83]);
+				$pendidikan['provinsi_smp'] = $pendidikan_provinsi_smp->id;
+				$pendidikan_kab_kota_smp = $this->Main_model->find_kabupaten($pendidikan['provinsi_sma'], $v[84]);
+				$pendidikan['kab_kota_smp'] = $pendidikan_kab_kota_smp->id;
+
+				$pendidikan['nama_smp'] = $v[85];
+				$pendidikan['rata_un_sd'] = $v[86];
+				$pendidikan['thn_lulus_sd'] = $v[87];
+
+				$pendidikan_provinsi_sd = $this->Main_model->find_prov($v[88]);
+				$pendidikan['provinsi_sd'] = $pendidikan_provinsi_sd->id;
+				$pendidikan_kab_kota_sd = $this->Main_model->find_kabupaten($pendidikan['provinsi_sd'], $v[89]);
+				$pendidikan['kab_kota_sd'] = $pendidikan_kab_kota_sd->id;
+
+				$pendidikan['nama_sd'] = $v[90];
+
+				$seleksi['nosis_panjang'] = $v[3];
+				$seleksi['jalur_seleksi'] = $v[6];
+				$seleksi['diktuk_spn'] = $v[7];
+				$seleksi['nilai_jasmani'] = $v[9];
+				$seleksi['nilai_psi'] = $v[10];
+				$seleksi['nilai_uji_akademik'] = $v[11];
+				$seleksi['nilai_akhir'] = $v[13];
+
+				// $seleksi['ranking'] = $v[];
+
+				$wali['nama_wali'] = $v[44];
+				$wali['agama_wali'] = $v[43];
+				$wali['no_hp_wali'] = $v[42];
+				$wali['kel_kerja_wali'] = $v[41];
+				$wali['jns_kerja_wali'] = $v[40];
+				$wali['gol_kerja_wali'] = $v[39];
+				$wali['jabatan_wali'] = $v[38];
+				$wali['nama_kantor_wali'] = $v[37];
+				$wali['alamat_kantor_wali'] = $v[36];
+				$wali['tgl_lahir_wali'] = $v[35];
+				$wali['status_wali'] = $v[34];
+				$wali['nama_ibu'] = $v[55];
+				$wali['agama_ibu'] = $v[54];
+				$wali['no_hp_ibu'] = $v[53];
+				$wali['kel_kerja_ibu'] = $v[52];
+				$wali['jns_kerja_ibu'] = $v[51];
+				$wali['gol_kerja_ibu'] = $v[50];
+				$wali['jabatan_ibu'] = $v[49];
+				$wali['nama_kantor_ibu'] = $v[48];
+				$wali['alamat_kantor_ibu'] = $v[47];
+				$wali['tgl_lahir_ibu'] = $v[46];
+				$wali['status_ibu'] = $v[45];
+				$wali['nama_bapak'] = $v[66];
+				$wali['agama_bapak'] = $v[65];
+				$wali['no_hp_bapak'] = $v[64];
+				$wali['kel_kerja_bapak'] = $v[63];
+				$wali['jns_kerja_bapak'] = $v[62];
+				$wali['gol_kerja_bapak'] = $v[61];
+				$wali['jabatan_bapak'] = $v[60];
+				$wali['nama_kantor_bapak'] = $v[59];
+				$wali['alamat_kantor_bapak'] = $v[58];
+				$wali['tgl_lahir_bapak'] = $v[57];
+				$wali['status_bapak'] = $v[56];
+
+
+				$siswa['pendidikan'] = $this->Main_model->insert_pendidikan($pendidikan);
+				$siswa['wali'] = $this->Main_model->insert_wali($wali);
+				$siswa['seleksi'] = $this->Main_model->insert_seleksi($seleksi);
+				$trans = $this->Main_model->insert_siswa($siswa);
+			}
+		}
+
+		if ($trans) {
+			echo json_encode(['msg' => 'Operasi selesai', 'type' => 'success']);
+		}else{
+			echo json_encode(['msg' => 'Operasi gagal', 'type' => 'warning']);
+		}
+	}
+
 }
 
 /* End of file Siswa.php */

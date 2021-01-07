@@ -160,6 +160,47 @@ class Main_model extends CI_Model {
 		return $data;
 	}
 
+
+	function find_polda($string)
+	{
+		$this->db->like('nama_polda', $string, 'BOTH');
+		return $this->db->get('mt_polda')->row();
+	}
+
+	function find_polres($polda, $string)
+	{
+		$this->db->like('nama_polres', $string, 'BOTH');
+		$datas = $this->db->get_where('mt_polres', ['id_polda' => $polda])->row();
+		return $datas;
+	}
+
+	function find_prov($string)
+	{
+		$this->db->like('name', $string, 'BOTH');
+		return $this->db->get('mt_provinsi')->row();
+	}
+
+	function find_kabupaten($provinsi, $string)
+	{
+		$this->db->like('name', $string, 'BOTH');
+		$datas = $this->db->get_where('mt_kabupaten', ['province_id' => $provinsi])->row();
+		return $datas;
+	}
+
+	function find_kecamatan($kabupaten, $string)
+	{
+		$this->db->like('name', $string, 'BOTH');
+		$datas = $this->db->get_where('mt_kecamatan', ['regency_id' => $kabupaten])->row();
+		return $datas;
+	}
+
+	function find_kelurahan($kelurahan, $string)
+	{
+		$this->db->like('name', $string, 'BOTH');
+		$datas = $this->db->get_where('mt_kelurahan', ['district_id' => $kelurahan])->row();
+		return $datas;
+	}
+
 }
 
 /* End of file Main_model.php */
