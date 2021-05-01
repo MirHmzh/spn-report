@@ -71,29 +71,24 @@ class Siswa extends CI_Controller {
 
 	function get_siswa()
 	{
-		$col[0] = 'id_siswa';
+		$col = [
+			'id_siswa',
+			'nik_siswa',
+			'nama_siswa',
+			'nosis_panjang',
+			''
+		];
 		$datatable['length']		= $this->input->post('length');
 		$datatable['start'] 		= $this->input->post('start');
 		$datatable['search'] 		= $this->input->post('search[value]');
 		$datatable['draw'] 			= $this->input->post('draw');
 		$datatable['sort_column'] 	= $col[$this->input->post('order[0][column]')];
 		$datatable['sort_order'] 	= $this->input->post('order[0][dir]');
-		// print_r($this->Siswa_model->get_all_siswa());
 		$datas = [
 			'draw' => $datatable['draw'],
 			'recordsTotal' => 1,
 			'recordsFiltered' => 1,
-			'data' => $this->Siswa_model->get_all_siswa(),
-			// 'data' => [
-			// 	[
-			// 		'id_siswa' => '1',
-			// 		'nik_siswa' => 3515,
-			// 		'nama_siswa' => 'John Doe',
-			// 		'email_siswa' => 'mail@mail.co',
-			// 		'ranking' => '23',
-			// 		'nilai_akhir' => '98.80'
-			// 	]
-			// ],
+			'data' => $this->Siswa_model->get_all_siswa($datatable),
 		];
 		echo json_encode($datas);
 	}

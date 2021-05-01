@@ -35,7 +35,7 @@ class Siswa_model extends CI_Model {
 				->get('mt_siswa')->row_array();
 	}
 
-	function get_all_siswa()
+	function get_all_siswa($datatable)
 	{
 		return $this->db->select('
 					mt_siswa.*,
@@ -70,8 +70,15 @@ class Siswa_model extends CI_Model {
 				->join('mt_kabupaten as kabupaten_sd', 'kabupaten_sd.id = mt_siswa.kabupaten_kota')
 				->join('mt_polda as polda', 'polda.id_polda = mt_siswa.asal_polda')
 				->join('mt_polres as polres', 'polres.id_polres = mt_siswa.asal_polres AND polda.id_polda = mt_siswa.asal_polda')
-				->limit($this->input->post('length'))
-				->offset($this->input->post('start'))
+				->limit($datatable['length'])
+				->offset($datatable['start'])
+				->order_by($datatable['sort_column'], $datatable['sort_order'])
+				->or_like([
+					'id_siswa' => $datatable['search'],
+					'nik_siswa' => $datatable['search'],
+					'nama_siswa' => $datatable['search'],
+					'nosis_panjang' => $datatable['search']
+				])
 				->get('mt_siswa')->result_array();
 	}
 
