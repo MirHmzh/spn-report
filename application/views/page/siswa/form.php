@@ -874,6 +874,10 @@
           },
         });
       <?php } ?>
+      function randomizer(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+      $('input[name="ranking"]').val(randomizer(50,60));
       $("select[name='provinsi_sma']").change((el) => {
         let val = $(el.target).val();
         $.get("<?= base_url('main/get_kabupaten/') ?>"+val, function(data) {
